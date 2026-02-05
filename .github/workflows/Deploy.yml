@@ -13,12 +13,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Push to Hugging Face Space
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      - name: Configure git
         run: |
           git config --global user.email "github-actions@github.com"
           git config --global user.name "github-actions"
 
-          git remote add hf https://huggingface.co/spaces/LRojo0/AGENTEMULTIMODAL
-          git push https://user:${HF_TOKEN}@huggingface.co/spaces/LRojo0/AGENTEMULTIMODAL main --force
+      - name: Push to Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git remote remove hf || true
+          git remote add hf https://user:${HF_TOKEN}@huggingface.co/spaces/LRojo0/AGENTEMULTIMODAL.git
+          git push hf main --force
+
