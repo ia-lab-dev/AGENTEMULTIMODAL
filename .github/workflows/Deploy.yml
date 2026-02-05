@@ -10,18 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Configure git
+      - name: Setup SSH for Hugging Face
         run: |
-          git config --global user.email "github-actions@github.com"
-          git config --global user.name "github-actions"
+          mkdir -p ~/.ssh
+          echo "${{ secrets.HF_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan huggingface.co >> ~/.ssh/known_hosts
 
       - name: Push to Hugging Face Space
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           git remote remove hf || true
-          git remote add hf https://LRojo0:${HF_TOKEN}@huggingface.co/spaces/LRojo0/AGENTEMULTIMODAL.git
+          git remote add hf git@huggingface.co:spaces/LRojo0/AGENTEMULTIMODAL.git
           git push hf main --force
