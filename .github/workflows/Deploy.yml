@@ -23,6 +23,5 @@ jobs:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           git remote remove hf || true
-          git remote add hf https://user:${HF_TOKEN}@huggingface.co/spaces/LRojo0/AGENTEMULTIMODAL.git
+          git remote add hf https://LRojo0:${HF_TOKEN}@huggingface.co/spaces/LRojo0/AGENTEMULTIMODAL.git
           git push hf main --force
-
